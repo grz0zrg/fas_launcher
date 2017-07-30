@@ -17,8 +17,12 @@ This program was made with the [CodeLite IDE](https://codelite.org/) to ease the
 Requirements :
 
  * [PortAudio](http://www.portaudio.com/download.html)
- * [wxWidgets 3](https://www.wxwidgets.org/)
+ * [wxWidgets](https://www.wxwidgets.org/)
  * [tiny-process-library](https://github.com/eidheim/tiny-process-library)
+
+This also make use of [SQLite](https://www.sqlite.org/)
+
+This was only compiled under Linux for now.
 
 ## Screenshots
 
