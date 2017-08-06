@@ -1,17 +1,43 @@
 #include "MainFrame.h"
 #include <wx/aboutdlg.h>
 
-wxBEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
-    EVT_BUTTON(Exec_Btn_Close, MyPipeFrame::OnBtnClose)
+TinyProcessLib::Process *fas_process;
 
-    EVT_CLOSE(MyPipeFrame::OnClose)
+std::atomic<bool> fas_state;
+std::mutex m_fas_output;
+std::vector<std::string> fas_output;
+
+RenderTimer::RenderTimer(wxTextCtrl *textout) : wxTimer() {
+    RenderTimer::textout = textout;
+}
+ 
+void RenderTimer::Notify() {
+    m_fas_output.lock();
+    for (unsigned int i = 0; i < fas_output.size(); i += 1) {
+        RenderTimer::textout->AppendText(fas_output[i]);
+    }
+    fas_output.clear();
+    m_fas_output.unlock();
+}
+ 
+void RenderTimer::start()
+{
+    wxTimer::Start(1000);
+}
+
+wxBEGIN_EVENT_TABLE(PipeFrame, wxFrame)
+    EVT_BUTTON(Exec_Btn_Close, PipeFrame::OnBtnClose)
+
+    EVT_CLOSE(PipeFrame::OnClose)
 wxEND_EVENT_TABLE()
 
-MyPipeFrame::MyPipeFrame(wxFrame *parent,
+PipeFrame::PipeFrame(wxFrame *parent,
                          const wxString& cmd)
-           : wxFrame(parent, wxID_ANY, cmd)
+           : wxFrame(parent, wxID_ANY, cmd, wxDefaultPosition, wxSize(500,400))
 {
-    wxPanel *panel = new wxPanel(this, wxID_ANY);
+    SetMinSize(wxSize(500,400));
+    
+    wxPanel *panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(500,400));
 
     m_textOut = new wxTextCtrl(panel, wxID_ANY, wxEmptyString,
                               wxDefaultPosition, wxDefaultSize,
@@ -19,11 +45,10 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
     m_textOut->SetEditable(false);
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
-    sizerTop->Add(m_textOut, 0, wxGROW | wxALL, 5);
+    sizerTop->Add(m_textOut, 1, wxGROW | wxALL | wxEXPAND, 5);
 
     wxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
-    sizerBtns->
-        Add(new wxButton(panel, Exec_Btn_Close, wxT("&Close")), 0, wxALL, 5);
+    sizerBtns->Add(new wxButton(panel, Exec_Btn_Close, wxT("&Close")), 0, wxALL, 5);
 
     sizerTop->Add(sizerBtns, 0, wxCENTRE | wxALL, 5);
     
@@ -31,22 +56,34 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
     sizerTop->Fit(this);
 
     Show();
+    
+    timer = new RenderTimer(m_textOut);
+    timer->start();
 }
 
-void MyPipeFrame::addOutput(const std::string &output)
+void PipeFrame::addOutput(const std::string &output)
 {
     wxString out(output);
     
     m_textOut->AppendText(out);
 }
 
-void MyPipeFrame::DoClose()
-{
-
+void PipeFrame::DoClose() {
+    timer->Stop();
+    if (fas_process) {
+        fas_process->write("q", 1);
+        fas_process->close_stdin();
+    }
+    Destroy();
 }
 
-void MyPipeFrame::OnClose(wxCloseEvent& event)
+void PipeFrame::OnClose(wxCloseEvent& event)
 {
+    timer->Stop();
+    if (fas_process) {
+        fas_process->write("q", 1);
+        fas_process->close_stdin();
+    }
     event.Skip();
 }
 
@@ -267,41 +304,37 @@ void MainFrame::OnLaunchFASClicked(wxCommandEvent& event)
         delete current_settings;
         
         current_settings = settings;
-         
-/*
-        wxProcess *fas_process = wxProcess::Open(cmd);
-        if (!fas_process)
-        {
-            wxLogError(wxT("Execution of 'fas' failed."));
-            
-            wxMessageBox(wxT("The server has terminated.\nCheck the settings ?"), wxT("Server closed."), wxICON_ERROR);
-            
-            return;
-        }
-*/
 
         wxListBox* session_listbox = GetSessionsListBox();
         int selected_session = session_listbox->GetSelection();
         
         if (selected_session != wxNOT_FOUND) {
-        //    wxLaunchDefaultBrowser("https://www.fsynth.com/app/" + session_listbox->GetString(selected_session) + "?fas=1", wxBROWSER_NEW_WINDOW);
+            wxLaunchDefaultBrowser("https://www.fsynth.com/app/" + session_listbox->GetString(selected_session) + "?fas=1", wxBROWSER_NEW_WINDOW);
         }
 
-        MyPipeFrame *fas_frame = new MyPipeFrame(this, cmd_std_str);
+        PipeFrame *fas_frame = new PipeFrame(this, cmd_std_str);
         
-        //std::thread fasThread([&]() {
-            fas_process = new TinyProcessLib::Process(cmd_std_str, "", [](const char *bytes, size_t n) {
-                    std::cout << "Output from stdout: " << std::string(bytes, n);
-                    //fas_frame->addOutput(std::string(bytes, n));
-                });
+        fas_output.clear();
+        
+        std::thread fasThread([&]() {
+            fas_process = new TinyProcessLib::Process("./fas", "", [](const char *bytes, size_t n) {
+                    m_fas_output.lock();
+                    //std::cout << "Output from stdout: " << std::string(bytes, n);
+                    fas_output.push_back(std::string(bytes, n));
+                    m_fas_output.unlock();
+                }, nullptr, true);
                 
-                fas_process_state = 1;
-
-        //        if (fas_process->get_exit_status()) {
-        //            fas_process_state = 0;
-        //        }
-        //});
-        //fasThread.detach();
+            fas_state = true;
+                
+            if (fas_process->get_exit_status()) {
+                fas_state = false;
+                
+                m_fas_output.lock();
+                fas_process = 0;
+                m_fas_output.unlock();
+            }
+        });
+        fasThread.detach();
     } else {
         wxMessageBox(wxT("The server is already started!"));
     }

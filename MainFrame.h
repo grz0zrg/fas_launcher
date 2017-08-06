@@ -1,6 +1,8 @@
 #ifndef MAINFRAME_H
 #define MAINFRAME_H
+
 #include <vector>
+#include <atomic>
 
 #include "wxcrafter.h"
 #include "portaudio.h"
@@ -11,11 +13,23 @@ enum {
     Exec_Btn_Close
 };
 
-class MyPipeFrame : public wxFrame
+class RenderTimer : public wxTimer
+{
+    wxTextCtrl *textout;
+public:
+    RenderTimer(wxTextCtrl *textout);
+    void Notify();
+    void start();
+};
+
+class PipeFrame : public wxFrame
 {
 public:
-    MyPipeFrame(wxFrame *parent,
+    PipeFrame(wxFrame *parent,
                 const wxString& cmd);
+    ~PipeFrame() {
+        delete timer;
+    }
                 
     void addOutput(const std::string &output);
 
@@ -27,7 +41,8 @@ protected:
     void DoClose();
 
 private:
-
+    RenderTimer* timer;
+    
     wxTextCtrl *m_textOut;
 
     wxDECLARE_EVENT_TABLE();
@@ -102,7 +117,7 @@ public:
     void OnSessionDblClick(wxCommandEvent& event);
     void OnSettingsChanged(wxCommandEvent& event);
     
-    TinyProcessLib::Process *fas_process;
+    //TinyProcessLib::Process *fas_process;
     int fas_process_state = 0;
 
     sqlite3 *db = 0;
