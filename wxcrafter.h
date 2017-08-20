@@ -82,6 +82,15 @@ protected:
     wxSpinCtrlDouble* m_spinButton108;
     wxStaticText* m_staticText222;
     wxTextCtrl* m_textCtrl224;
+    // OSC
+    wxCollapsiblePane* m_oscPanel;
+    wxCheckBox* m_oscCheckBox;
+    wxStaticText* m_oscIpText;
+    wxTextCtrl* m_oscIpTextCtrl;
+    wxStaticText* m_oscPortText;
+    wxSpinCtrl* m_oscPortSpinButton;
+    //
+    wxCheckBox* m_fasLaunchCk;
     wxCollapsiblePane* m_collPane192;
     wxStaticText* m_staticText1105;
     wxSpinButton* m_spinButton1126;
@@ -155,6 +164,15 @@ public:
     wxButton* GetButton233() { return m_button233; }
     wxPanel* GetMainPanel() { return mainPanel; }
     wxMenuBar* GetMenuBar() { return m_menuBar; }
+    
+    // OSC
+    wxTextCtrl *GetOscIpTextCtrl() { return m_oscIpTextCtrl; }
+    wxSpinCtrl* GetOscPortSpinCtrl() { return m_oscPortSpinButton; }
+    wxCheckBox* GetOscOutCheckBox() { return m_oscCheckBox; }
+    //
+    
+    wxCheckBox* GetFasAppLaunchCheckBox() { return m_fasLaunchCk; }
+    
     MainFrameBaseClass(wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fragment (launcher) - https://www.fsynth.com"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(500,360), long style = wxCAPTION|wxRESIZE_BORDER|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxCLOSE_BOX);
     virtual ~MainFrameBaseClass();
 };

@@ -65,7 +65,7 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     
     m_collpaneWin196->SetSizer(staticBoxSizer202);
     
-    wxFlexGridSizer* flexGridSizer82 = new wxFlexGridSizer(5, 2, 0, 0);
+    wxFlexGridSizer* flexGridSizer82 = new wxFlexGridSizer(6, 2, 0, 0);
     flexGridSizer82->SetFlexibleDirection( wxBOTH );
     flexGridSizer82->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
     flexGridSizer82->AddGrowableCol(1);
@@ -207,7 +207,7 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     
     flexGridSizer104->Add(m_spinButton108, 0, wxEXPAND, WXC_FROM_DIP(5));
     
-    m_staticText222 = new wxStaticText(m_collPane188->GetPane(), wxID_ANY, _("Grains folder"), wxDefaultPosition, wxDLG_UNIT(m_collPane188->GetPane(), wxSize(-1,-1)), 0);
+    m_staticText222 = new wxStaticText(m_collPane188->GetPane(), wxID_ANY, _("Grains path"), wxDefaultPosition, wxDLG_UNIT(m_collPane188->GetPane(), wxSize(-1,-1)), 0);
     
     flexGridSizer104->Add(m_staticText222, 0, wxALL|wxALIGN_RIGHT, WXC_FROM_DIP(5));
     
@@ -217,6 +217,56 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     #endif
     
     flexGridSizer104->Add(m_textCtrl224, 0, wxEXPAND, WXC_FROM_DIP(5));
+    
+    // OSC
+    m_oscPanel = new wxCollapsiblePane(mainPanel, wxID_ANY, _("OSC"), wxDefaultPosition, wxDLG_UNIT(mainPanel, wxSize(-1,-1)), wxCP_DEFAULT_STYLE);
+    
+    fasSizer->Add(m_oscPanel, 0, wxALL|wxEXPAND|wxGROW, WXC_FROM_DIP(5));
+    
+    wxStaticBoxSizer* oscStaticBoxSizer = new wxStaticBoxSizer( new wxStaticBox(m_oscPanel->GetPane(), wxID_ANY, wxT("")), wxVERTICAL);
+    
+    wxWindow *m_oscPaneWin = m_oscPanel->GetPane();
+    
+    m_oscPaneWin->SetSizer(oscStaticBoxSizer);
+    
+    wxFlexGridSizer* oscFlexGridSizer = new wxFlexGridSizer(4, 2, 0, 0);
+    oscFlexGridSizer->SetFlexibleDirection( wxBOTH );
+    oscFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+    oscFlexGridSizer->AddGrowableCol(1);
+    
+    oscStaticBoxSizer->Add(oscFlexGridSizer, 1, wxALL|wxEXPAND, WXC_FROM_DIP(5));
+    
+    m_oscIpText = new wxStaticText(m_oscPanel->GetPane(), wxID_ANY, _("IP address"), wxDefaultPosition, wxDLG_UNIT(m_oscPanel->GetPane(), wxSize(-1,-1)), 0);
+    
+    oscFlexGridSizer->Add(m_oscIpText, 0, wxALL|wxALIGN_RIGHT, WXC_FROM_DIP(5));
+    
+    m_oscIpTextCtrl = new wxTextCtrl(m_oscPanel->GetPane(), wxID_ANY, wxT("127.0.0.1"), wxDefaultPosition, wxDLG_UNIT(m_oscPanel->GetPane(), wxSize(-1,-1)), 0);
+    #if wxVERSION_NUMBER >= 3000
+    m_oscIpTextCtrl->SetHint(wxT(""));
+    #endif
+    
+    oscFlexGridSizer->Add(m_oscIpTextCtrl, 0, wxEXPAND, WXC_FROM_DIP(5));
+    
+    m_oscPortText = new wxStaticText(m_oscPanel->GetPane(), wxID_ANY, _("Port"), wxDefaultPosition, wxDLG_UNIT(m_oscPanel->GetPane(), wxSize(-1,-1)), 0);
+    
+    oscFlexGridSizer->Add(m_oscPortText, 0, wxALL|wxALIGN_RIGHT, WXC_FROM_DIP(5));
+    
+    m_oscPortSpinButton = new wxSpinCtrl(m_oscPanel->GetPane(), wxID_ANY, wxT("0"), wxDefaultPosition, wxDLG_UNIT(m_oscPanel->GetPane(), wxSize(-1,-1)), wxSP_ARROW_KEYS);
+    m_oscPortSpinButton->SetRange(0, 65535);
+    m_oscPortSpinButton->SetValue(57120);
+    
+    oscFlexGridSizer->Add(m_oscPortSpinButton, 0, wxEXPAND, WXC_FROM_DIP(5));
+    
+    wxStaticLine *m_oscStaticLine = new wxStaticLine(m_oscPanel->GetPane(), wxID_ANY, wxDefaultPosition, wxDLG_UNIT(m_oscPanel->GetPane(), wxSize(-1,-1)), wxLI_HORIZONTAL);
+    m_oscStaticLine->Hide();
+    
+    oscFlexGridSizer->Add(m_oscStaticLine, 0, wxALL|wxEXPAND, WXC_FROM_DIP(5));
+    
+    m_oscCheckBox = new wxCheckBox(m_oscPanel->GetPane(), wxID_ANY, _("Enable OSC Output"), wxDefaultPosition, wxDLG_UNIT(m_oscPanel->GetPane(), wxSize(-1,-1)), 0);
+    m_oscCheckBox->SetValue(false);
+    
+    oscFlexGridSizer->Add(m_oscCheckBox, 0, wxALIGN_RIGHT, WXC_FROM_DIP(5));
+    //
     
     m_collPane192 = new wxCollapsiblePane(mainPanel, wxID_ANY, _("Misc"), wxDefaultPosition, wxDLG_UNIT(mainPanel, wxSize(-1,-1)), wxCP_DEFAULT_STYLE);
     
@@ -268,6 +318,11 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     wxBoxSizer* boxSizer128 = new wxBoxSizer(wxVERTICAL);
     
     fasSizer->Add(boxSizer128, 1, wxALL|wxEXPAND, WXC_FROM_DIP(5));
+    
+    m_fasLaunchCk = new wxCheckBox(mainPanel, wxID_ANY, _("Start app. when server start"), wxDefaultPosition, wxDLG_UNIT(mainPanel, wxSize(-1,-1)), 0);
+    m_fasLaunchCk->SetValue(false);
+    
+    boxSizer128->Add(m_fasLaunchCk, 0, wxALIGN_RIGHT, WXC_FROM_DIP(5));
     
     m_button136 = new wxButton(mainPanel, wxID_ANY, _("Save as default"), wxDefaultPosition, wxDLG_UNIT(mainPanel, wxSize(-1,-1)), 0);
     
@@ -362,6 +417,11 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     this->Connect(m_spinButton1126->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
     this->Connect(m_spinButton1168->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
     this->Connect(m_spinButton12010->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
+    
+    // OSC
+    this->Connect(m_oscCheckBox->GetId(), wxEVT_CHECKBOX, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
+    this->Connect(m_oscPortSpinButton->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
+    this->Connect(m_oscIpTextCtrl->GetId(), wxEVT_TEXT, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
 }
 
 MainFrameBaseClass::~MainFrameBaseClass()
@@ -391,4 +451,9 @@ MainFrameBaseClass::~MainFrameBaseClass()
     this->Disconnect(m_spinButton1126->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
     this->Disconnect(m_spinButton1168->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
     this->Disconnect(m_spinButton12010->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
+
+    // OSC
+    this->Disconnect(m_oscCheckBox->GetId(), wxEVT_CHECKBOX, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
+    this->Disconnect(m_oscPortSpinButton->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
+    this->Disconnect(m_oscIpTextCtrl->GetId(), wxEVT_TEXT, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
 }

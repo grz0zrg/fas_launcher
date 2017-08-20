@@ -60,6 +60,9 @@ class Settings {
         int port = 3003;
         int rx = 4096;
         int compression = 0;
+        std::string osc_out_ip = "127.0.0.1";
+        int osc_out_port = 57120;
+        int osc_out = 0;
         double noise_amount = 0.1;
         std::string grains_folder = "grains";
         int fps = 60;
@@ -79,7 +82,10 @@ class Settings {
             parameters += " --port " + std::to_string(port);
             parameters += " --rx_buffer_size " + std::to_string(rx);
             parameters += " --noise_amount " + std::to_string(noise_amount);
-            //parameters += " --grains_folder " + grains_folder;
+            parameters += " --grains_folder " + grains_folder;
+            parameters += " --osc_out " + std::to_string(osc_out);
+            parameters += " --osc_addr " + osc_out_ip;
+            parameters += " --osc_port " + std::to_string(osc_out_port);
             parameters += " --fps " + std::to_string(fps);
             parameters += " --frames_queue_size " + std::to_string(frames_queue);
             parameters += " --commands_queue_size " + std::to_string(commands_queue);

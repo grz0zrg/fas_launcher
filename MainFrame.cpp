@@ -35,6 +35,9 @@ PipeFrame::PipeFrame(wxFrame *parent,
                          const wxString& cmd)
            : wxFrame(parent, wxID_ANY, cmd, wxDefaultPosition, wxSize(500,400))
 {
+    wxIcon fs_icon = wxIcon("icon.png", wxBITMAP_TYPE_PNG);
+    SetIcon(fs_icon);
+    
     SetMinSize(wxSize(500,400));
     
     wxPanel *panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(500,400));
@@ -90,6 +93,9 @@ void PipeFrame::OnClose(wxCloseEvent& event)
 MainFrame::MainFrame(wxWindow* parent)
     : MainFrameBaseClass(parent)
 {
+    wxIcon fs_icon = wxIcon("icon.png", wxBITMAP_TYPE_PNG);
+    SetIcon(fs_icon);
+    
     UpdateDevices();
     
     sqlite3_open("main.db", &db);
@@ -110,6 +116,9 @@ MainFrame::MainFrame(wxWindow* parent)
             "port                  INT      NOT NULL," \
             "rx                    INT      NOT NULL," \
             "compression           INT      NOT NULL," \
+            "osc_out               INT      NOT NULL," \
+            "osc_out_ip            TEXT     NOT NULL," \
+            "osc_out_port          INT     NOT NULL," \
             "noise                 REAL     NOT NULL," \
             "grains_folder         TEXT     NOT NULL," \
             "fps                   INT      NOT NULL," \
@@ -157,6 +166,9 @@ void MainFrame::submitSettingsToDB(Settings *settings, std::string &session_name
         "', " + std::to_string(settings->port) +
         ", " + std::to_string(settings->rx) +
         ", " + std::to_string(settings->compression) +
+        ", " + std::to_string(settings->osc_out) +
+        ", " + settings->osc_out_ip +
+        ", " + std::to_string(settings->osc_out_port) +
         ", " + std::to_string(settings->noise_amount) +
         ", '" + settings->grains_folder +
         "', " + std::to_string(settings->fps) +
@@ -188,6 +200,9 @@ void MainFrame::updateDBSettings(Settings *settings, std::string &session_name) 
         "', port=" + std::to_string(settings->port) +
         ", rx=" + std::to_string(settings->rx) +
         ", compression=" + std::to_string(settings->compression) +
+        ", osc_out=" + std::to_string(settings->osc_out) +
+        ", osc_out_ip=" + settings->osc_out_ip +
+        ", osc_out_port=" + std::to_string(settings->port) +
         ", noise=" + std::to_string(settings->noise_amount) +
         ", grains_folder='" + settings->grains_folder +
         "', fps=" + std::to_string(settings->fps) +
@@ -218,11 +233,14 @@ void MainFrame::fillSettingsFromDBstmt(Settings *settings, sqlite3_stmt *stmt) {
     int port = sqlite3_column_int(stmt, 9);
     int rx = sqlite3_column_int(stmt, 10);
     int compression = sqlite3_column_int(stmt, 11);
-    double noise = sqlite3_column_double(stmt, 12);
-    const char *grains_folder = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 13));
-    int fps = sqlite3_column_int(stmt, 14);
-    int frames_queue = sqlite3_column_int(stmt, 15);
-    int commands_queue = sqlite3_column_int(stmt, 16);
+    int osc_out = sqlite3_column_int(stmt, 12);
+    const char *osc_out_ip = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 13));
+    int osc_out_port = sqlite3_column_int(stmt, 14);
+    double noise = sqlite3_column_double(stmt, 15);
+    const char *grains_folder = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 16));
+    int fps = sqlite3_column_int(stmt, 17);
+    int frames_queue = sqlite3_column_int(stmt, 18);
+    int commands_queue = sqlite3_column_int(stmt, 19);
 
     settings->device.clear();
     settings->device.append(device);
@@ -239,6 +257,12 @@ void MainFrame::fillSettingsFromDBstmt(Settings *settings, sqlite3_stmt *stmt) {
     settings->port = port;
     settings->rx = rx;
     settings->compression = compression;
+    
+    settings->osc_out = osc_out;
+    settings->osc_out_ip.clear();
+    settings->osc_out_ip.append(osc_out_ip);
+    settings->osc_out_port = osc_out_port;
+    
     settings->noise_amount = noise;
     
     settings->grains_folder.clear();
@@ -308,7 +332,10 @@ void MainFrame::OnLaunchFASClicked(wxCommandEvent& event)
         wxListBox* session_listbox = GetSessionsListBox();
         int selected_session = session_listbox->GetSelection();
         
-        if (selected_session != wxNOT_FOUND) {
+        wxCheckBox* fasAppLaunchCk = GetFasAppLaunchCheckBox();
+        int fasAppLaunch = fasAppLaunchCk->GetValue();
+        
+        if (selected_session != wxNOT_FOUND && fasAppLaunch == 1) {
             wxLaunchDefaultBrowser("https://www.fsynth.com/app/" + session_listbox->GetString(selected_session) + "?fas=1", wxBROWSER_NEW_WINDOW);
         }
 
@@ -358,6 +385,11 @@ void MainFrame::updateUISettings(Settings *settings) {
     wxSpinButton* fqueue_spin = GetSpinButton1168();
     wxSpinButton* cqueue_spin = GetSpinButton12010();
     
+    // OSC
+    wxTextCtrl *osc_out_ip_txt_ctrl = GetOscIpTextCtrl();
+    wxSpinCtrl *osc_out_port_spin = GetOscPortSpinCtrl();
+    wxCheckBox *osc_out_ck = GetOscOutCheckBox();
+    
     wxString wdevice_name(settings->device);
     int device_id = device_choice->FindString(wdevice_name);
     if (device_id == wxNOT_FOUND) {
@@ -387,6 +419,11 @@ void MainFrame::updateUISettings(Settings *settings) {
     fps_spin->SetValue(settings->fps);
     fqueue_spin->SetValue(settings->frames_queue);
     cqueue_spin->SetValue(settings->commands_queue);
+    
+    // OSC
+    osc_out_ip_txt_ctrl->ChangeValue(settings->osc_out_ip);
+    osc_out_port_spin->SetValue(settings->osc_out_port);
+    osc_out_ck->SetValue(settings->osc_out);
 }
 
 Settings *MainFrame::getCurrentSettings() {
@@ -406,6 +443,11 @@ Settings *MainFrame::getCurrentSettings() {
     wxSpinButton* fps_spin = GetSpinButton1126();
     wxSpinButton* fqueue_spin = GetSpinButton1168();
     wxSpinButton* cqueue_spin = GetSpinButton12010();
+    
+    // OSC
+    wxTextCtrl *osc_out_ip_txt_ctrl = GetOscIpTextCtrl();
+    wxSpinCtrl *osc_out_port_spin = GetOscPortSpinCtrl();
+    wxCheckBox *osc_out_ck = GetOscOutCheckBox();
     
     int device_id = device_choice->GetSelection();
     if (device_id != wxNOT_FOUND) {
@@ -444,6 +486,15 @@ Settings *MainFrame::getCurrentSettings() {
     current->fps = fps_spin->GetValue();
     current->frames_queue = fqueue_spin->GetValue();
     current->commands_queue = cqueue_spin->GetValue();
+    
+    // OSC
+    std::string osc_out_ip = std::string(osc_out_ip_txt_ctrl->GetValue().mb_str());
+    
+    current->osc_out_ip.clear();
+    current->osc_out_ip.append(osc_out_ip);
+    
+    current->osc_out = osc_out_ck->GetValue();
+    current->osc_out_port = osc_out_port_spin->GetValue();
     
     return current;
 }
@@ -500,13 +551,42 @@ void MainFrame::OnDelSessionClicked(wxCommandEvent& event)
 
 void MainFrame::OnAbout(wxCommandEvent& event)
 {
+    wxIcon fs_icon = wxIcon("icon_credits.png", wxBITMAP_TYPE_PNG);
+    SetIcon(fs_icon);
+    
     wxUnusedVar(event);
     wxAboutDialogInfo info;
+    info.SetIcon(fs_icon);
     info.SetName("Fragment (launcher)");
     info.SetWebSite("https://www.fsynth.com");
-    info.AddDeveloper("Julien Verneuil - contact@fsynth.com");
+    info.AddDeveloper("Julien Verneuil - contact@fsynth.com - https://github.com/grz0zrg");
     info.SetCopyright(_("Fragment © 2016 - 2017"));
-    info.SetDescription(_("The Collaborative Spectral Synthesizer"));
+    info.SetLicence(_("BSD 2-Clause License\n\
+        \n\
+        Copyright (c) 2017, Julien Verneuil\n\
+        All rights reserved. \n\
+        \n\
+        Redistribution and use in source and binary forms, with or without\n\
+        modification, are permitted provided that the following conditions are met:\n\
+        \n\
+        * Redistributions of source code must retain the above copyright notice, this\n\
+          list of conditions and the following disclaimer.\n\
+        \n\
+        * Redistributions in binary form must reproduce the above copyright notice,\n\
+          this list of conditions and the following disclaimer in the documentation\n\
+          and/or other materials provided with the distribution.\n\
+        \n\
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'\n\
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\n\
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\n\
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE\n\
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL\n\
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\n\
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\n\
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\n\
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n\
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."));
+    info.SetDescription(_("The Collaborative Spectral Synthesizer launcher"));
     ::wxAboutBox(info);
 }
 
