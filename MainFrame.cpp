@@ -118,8 +118,10 @@ MainFrame::MainFrame(wxWindow* parent)
             "compression           INT      NOT NULL," \
             "osc_out               INT      NOT NULL," \
             "osc_out_ip            TEXT     NOT NULL," \
-            "osc_out_port          INT     NOT NULL," \
+            "osc_out_port          INT      NOT NULL," \
             "noise                 REAL     NOT NULL," \
+            "smooth_factor         REAL     NOT NULL," \
+            "granular_max_density  INT      NOT NULL," \
             "grains_folder         TEXT     NOT NULL," \
             "fps                   INT      NOT NULL," \
             "frames_queue          INT      NOT NULL," \
@@ -170,6 +172,8 @@ void MainFrame::submitSettingsToDB(Settings *settings, std::string &session_name
         ", " + settings->osc_out_ip +
         ", " + std::to_string(settings->osc_out_port) +
         ", " + std::to_string(settings->noise_amount) +
+        ", " + std::to_string(settings->smooth_factor) +
+        ", " + std::to_string(settings->granular_max_density) +
         ", '" + settings->grains_folder +
         "', " + std::to_string(settings->fps) +
         ", " + std::to_string(settings->frames_queue) +
@@ -204,6 +208,8 @@ void MainFrame::updateDBSettings(Settings *settings, std::string &session_name) 
         ", osc_out_ip=" + settings->osc_out_ip +
         ", osc_out_port=" + std::to_string(settings->port) +
         ", noise=" + std::to_string(settings->noise_amount) +
+        ", smooth_factor=" + std::to_string(settings->smooth_factor) +
+        ", granular_max_density=" + std::to_string(settings->granular_max_density) +
         ", grains_folder='" + settings->grains_folder +
         "', fps=" + std::to_string(settings->fps) +
         ", frames_queue=" + std::to_string(settings->frames_queue) +
@@ -237,10 +243,12 @@ void MainFrame::fillSettingsFromDBstmt(Settings *settings, sqlite3_stmt *stmt) {
     const char *osc_out_ip = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 13));
     int osc_out_port = sqlite3_column_int(stmt, 14);
     double noise = sqlite3_column_double(stmt, 15);
-    const char *grains_folder = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 16));
-    int fps = sqlite3_column_int(stmt, 17);
-    int frames_queue = sqlite3_column_int(stmt, 18);
-    int commands_queue = sqlite3_column_int(stmt, 19);
+    double smooth_factor = sqlite3_column_double(stmt, 16);
+    int granular_max_density = sqlite3_column_int(stmt, 17);
+    const char *grains_folder = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 18));
+    int fps = sqlite3_column_int(stmt, 19);
+    int frames_queue = sqlite3_column_int(stmt, 20);
+    int commands_queue = sqlite3_column_int(stmt, 21);
 
     settings->device.clear();
     settings->device.append(device);
@@ -263,7 +271,10 @@ void MainFrame::fillSettingsFromDBstmt(Settings *settings, sqlite3_stmt *stmt) {
     settings->osc_out_ip.append(osc_out_ip);
     settings->osc_out_port = osc_out_port;
     
+    settings->smooth_factor = smooth_factor;
     settings->noise_amount = noise;
+    
+    settings->granular_max_density = granular_max_density;
     
     settings->grains_folder.clear();
     settings->grains_folder.append(grains_folder);
@@ -385,6 +396,9 @@ void MainFrame::updateUISettings(Settings *settings) {
     wxSpinButton* fqueue_spin = GetSpinButton1168();
     wxSpinButton* cqueue_spin = GetSpinButton12010();
     
+    wxSpinCtrlDouble* smooth_factor_spin = GetSpinButtonSInter();
+    wxSpinCtrl* granular_max_density_spin = GetSpinCtrlGrDensity();
+    
     // OSC
     wxTextCtrl *osc_out_ip_txt_ctrl = GetOscIpTextCtrl();
     wxSpinCtrl *osc_out_port_spin = GetOscPortSpinCtrl();
@@ -414,6 +428,8 @@ void MainFrame::updateUISettings(Settings *settings) {
     port_spin->SetValue(settings->port);
     rx_spin->SetValue(settings->rx);
     compression_ck->SetValue(settings->compression);
+    smooth_factor_spin->SetValue(settings->smooth_factor);
+    granular_max_density_spin->SetValue(settings->granular_max_density);
     noise_amount_spin->SetValue(settings->noise_amount);
     grains_folder_txt_ctrl->ChangeValue(settings->grains_folder);
     fps_spin->SetValue(settings->fps);
@@ -443,6 +459,9 @@ Settings *MainFrame::getCurrentSettings() {
     wxSpinButton* fps_spin = GetSpinButton1126();
     wxSpinButton* fqueue_spin = GetSpinButton1168();
     wxSpinButton* cqueue_spin = GetSpinButton12010();
+    
+    wxSpinCtrlDouble* smooth_factor_spin = GetSpinButtonSInter();
+    wxSpinCtrl* granular_max_density_spin = GetSpinCtrlGrDensity();
     
     // OSC
     wxTextCtrl *osc_out_ip_txt_ctrl = GetOscIpTextCtrl();
@@ -477,6 +496,8 @@ Settings *MainFrame::getCurrentSettings() {
     current->rx = rx_spin->GetValue();
     current->compression = compression_ck->GetValue();
     current->noise_amount = noise_amount_spin->GetValue();
+    current->smooth_factor = smooth_factor_spin->GetValue();
+    current->granular_max_density = granular_max_density_spin->GetValue();
     
     std::string grains_folder = std::string(grains_folder_txt_ctrl->GetValue().mb_str());
     

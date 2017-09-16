@@ -80,8 +80,12 @@ protected:
     wxCollapsiblePane* m_collPane188;
     wxStaticText* m_staticText106;
     wxSpinCtrlDouble* m_spinButton108;
+    wxStaticText* m_staticTextSInter;
+    wxSpinCtrlDouble* m_spinButtonSInter;
     wxStaticText* m_staticText222;
     wxTextCtrl* m_textCtrl224;
+    wxStaticText* m_staticTextGrDensity;
+    wxSpinCtrl* m_spinCtrlGrDensity;
     // OSC
     wxCollapsiblePane* m_oscPanel;
     wxCheckBox* m_oscCheckBox;
@@ -141,6 +145,7 @@ public:
     wxTextCtrl* GetTextCtrl72() { return m_textCtrl72; }
     wxStaticText* GetStaticText74() { return m_staticText74; }
     wxSpinCtrl* GetSpinCtrl86() { return m_spinCtrl86; }
+    wxSpinCtrl* GetSpinCtrlGrDensity() { return m_spinCtrlGrDensity; }
     wxStaticText* GetStaticText98() { return m_staticText98; }
     wxSpinButton* GetSpinButton100() { return m_spinButton100; }
     wxStaticLine* GetStaticLine92() { return m_staticLine92; }
@@ -148,6 +153,7 @@ public:
     wxCollapsiblePane* GetCollPane176() { return m_collPane176; }
     wxStaticText* GetStaticText106() { return m_staticText106; }
     wxSpinCtrlDouble* GetSpinButton108() { return m_spinButton108; }
+    wxSpinCtrlDouble* GetSpinButtonSInter() { return m_spinButtonSInter; }
     wxStaticText* GetStaticText222() { return m_staticText222; }
     wxTextCtrl* GetTextCtrl224() { return m_textCtrl224; }
     wxCollapsiblePane* GetCollPane188() { return m_collPane188; }

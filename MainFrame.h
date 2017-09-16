@@ -65,9 +65,11 @@ class Settings {
         int osc_out = 0;
         double noise_amount = 0.1;
         std::string grains_folder = "grains";
+        int granular_max_density = 128;
         int fps = 60;
         int frames_queue = 7;
         int commands_queue = 16;
+        double smooth_factor = 8;
         
         const std::string toFAS() {
             std::string parameters;
@@ -82,7 +84,9 @@ class Settings {
             parameters += " --port " + std::to_string(port);
             parameters += " --rx_buffer_size " + std::to_string(rx);
             parameters += " --noise_amount " + std::to_string(noise_amount);
+            parameters += " --smooth_factor " + std::to_string(smooth_factor);
             parameters += " --grains_folder " + grains_folder;
+            parameters += " --granular_max_density " + std::to_string(granular_max_density);
             parameters += " --osc_out " + std::to_string(osc_out);
             parameters += " --osc_addr " + osc_out_ip;
             parameters += " --osc_port " + std::to_string(osc_out_port);

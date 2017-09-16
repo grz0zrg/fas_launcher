@@ -207,6 +207,30 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     
     flexGridSizer104->Add(m_spinButton108, 0, wxEXPAND, WXC_FROM_DIP(5));
     
+    // granular max density
+    m_staticTextGrDensity = new wxStaticText(m_collPane188->GetPane(), wxID_ANY, _("Max granular. density"), wxDefaultPosition, wxDLG_UNIT(m_collPane188->GetPane(), wxSize(-1,-1)), 0);
+    
+    flexGridSizer104->Add(m_staticTextGrDensity, 0, wxALL, WXC_FROM_DIP(5));
+    
+    m_spinCtrlGrDensity = new wxSpinCtrl(m_collPane188->GetPane(), wxID_ANY, wxT("0"), wxDefaultPosition, wxDLG_UNIT(m_collPane188->GetPane(), wxSize(-1,-1)), wxSP_ARROW_KEYS);
+    m_spinCtrlGrDensity->SetRange(1, 16777216);
+    m_spinCtrlGrDensity->SetValue(128);
+    
+    flexGridSizer104->Add(m_spinCtrlGrDensity, 0, wxEXPAND, WXC_FROM_DIP(5));
+    
+    // interpolation factor
+    m_staticTextSInter = new wxStaticText(m_collPane188->GetPane(), wxID_ANY, _("Sample inter. factor"), wxDefaultPosition, wxDLG_UNIT(m_collPane188->GetPane(), wxSize(-1,-1)), 0);
+    
+    flexGridSizer104->Add(m_staticTextSInter, 0, wxALL|wxALIGN_RIGHT, WXC_FROM_DIP(5));
+    
+    m_spinButtonSInter = new wxSpinCtrlDouble(m_collPane188->GetPane(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDLG_UNIT(m_collPane188->GetPane(), wxSize(-1,-1)), wxSP_ARROW_KEYS, 0, 1.0, 0.1, 0.001);
+    m_spinButtonSInter->SetRange(0.001, 8192.0);
+    m_spinButtonSInter->SetValue(8.0);
+    m_spinButtonSInter->SetIncrement(0.001);
+    
+    flexGridSizer104->Add(m_spinButtonSInter, 0, wxEXPAND, WXC_FROM_DIP(5));
+    //
+    
     m_staticText222 = new wxStaticText(m_collPane188->GetPane(), wxID_ANY, _("Grains path"), wxDefaultPosition, wxDLG_UNIT(m_collPane188->GetPane(), wxSize(-1,-1)), 0);
     
     flexGridSizer104->Add(m_staticText222, 0, wxALL|wxALIGN_RIGHT, WXC_FROM_DIP(5));
@@ -417,6 +441,8 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     this->Connect(m_spinButton1126->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
     this->Connect(m_spinButton1168->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
     this->Connect(m_spinButton12010->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
+    this->Connect(m_spinButtonSInter->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
+    this->Connect(m_spinCtrlGrDensity->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
     
     // OSC
     this->Connect(m_oscCheckBox->GetId(), wxEVT_CHECKBOX, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
@@ -451,7 +477,9 @@ MainFrameBaseClass::~MainFrameBaseClass()
     this->Disconnect(m_spinButton1126->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
     this->Disconnect(m_spinButton1168->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
     this->Disconnect(m_spinButton12010->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
-
+    this->Disconnect(m_spinButtonSInter->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
+    this->Disconnect(m_spinCtrlGrDensity->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
+    
     // OSC
     this->Disconnect(m_oscCheckBox->GetId(), wxEVT_CHECKBOX, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
     this->Disconnect(m_oscPortSpinButton->GetId(), wxEVT_SPINCTRL, wxCommandEventHandler(MainFrameBaseClass::OnSettingsChanged), NULL, this);
