@@ -12,7 +12,7 @@ This program is a simple native launcher which provide an easy interface to star
 
 ## Package
 
-A .deb package is available in the **package** folder along with the [Debreate](https://antumdeluge.github.io/debreate-web/) file project used to build the package for amd64 platform.
+A .deb package is available in the **package** folder along with the [Debreate](https://antumdeluge.github.io/debreate-web/) file project used to build the package for the amd64 platform, this package contain the audio server and the launcher.
 
 ## Build
 
