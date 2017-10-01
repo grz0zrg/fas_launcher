@@ -15,7 +15,6 @@ public:
         PaError err = Pa_Initialize();
         if (err != paNoError) return false;
 
-        
         // Add the common image handlers
         wxImage::AddHandler( new wxPNGHandler );
         wxImage::AddHandler( new wxJPEGHandler );

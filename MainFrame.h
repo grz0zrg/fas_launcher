@@ -9,6 +9,10 @@
 #include "sqlite3.h"
 #include "process.hpp"
 
+#ifdef __UNIX__
+#include <pwd.h>
+#endif
+
 enum {
     Exec_Btn_Close
 };

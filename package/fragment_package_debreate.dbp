@@ -15,20 +15,19 @@ Description: Fragment Synthesizer
 <</CTRL>>
 <<FILES>>
 1
-/home/julien/Projets/fs/fas_launcher/Release/fas_launcher* -> fas_launcher -> /usr/local/bin
-/home/julien/Projets/fs/fas/fas* -> fas -> /usr/local/bin
-/home/julien/Projets/fs/fas_launcher/icon.png -> icon.png -> /usr/local/share/fragment
+/home/julien/Projets/fs/fas/grains/README -> README -> /usr/local/share/fragment/grains
 /home/julien/Projets/fs/fas_launcher/icon_credits.png -> icon_credits.png -> /usr/local/share/fragment
-/home/julien/Projets/fs/fas_launcher/Release/main.db -> main.db -> /usr/local/share/fragment
+/home/julien/Projets/fs/fas_launcher/icon.png -> icon.png -> /usr/local/share/fragment
+/home/julien/Projets/fs/fas/fas* -> fas -> /usr/local/bin
+/home/julien/Projets/fs/fas_launcher/Release/fas_launcher* -> fas_launcher -> /usr/local/bin
 <</FILES>>
 <<SCRIPTS>>
 <<PREINST>>
-1
-if [ ! -d ~/.fragment ]; then mkdir ~/.fragment; fi
-if [ ! -d ~/.fragment/grains ]; then mkdir ~/.fragment/grains; fi
+0
 <</PREINST>>
 <<POSTINST>>
-0
+1
+rm /usr/local/share/fragment/grains/README
 <</POSTINST>>
 <<PRERM>>
 0
@@ -79,7 +78,7 @@ Name=Fragment
 Version=1.0
 Exec=fas_launcher
 Comment=Collaborative cross-platform audiovisual live coding environment with pixels based image-synth
-Icon=~/.fragment/icon_credits.png
+Icon=/usr/local/share/fragment/icon_credits.png
 Type=Application
 Terminal=false
 StartupNotify=true

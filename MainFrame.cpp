@@ -2,6 +2,7 @@
 #include <wx/aboutdlg.h>
 
 TinyProcessLib::Process *fas_process;
+std::string program_name;
 
 std::atomic<bool> fas_state;
 std::mutex m_fas_output;
@@ -96,16 +97,35 @@ MainFrame::MainFrame(wxWindow* parent, const wxString& path)
     : MainFrameBaseClass(parent)
 {    
     install_path = path;
+
+#ifdef __UNIX__
+    const char *homedir;
+    if ((homedir = getenv("HOME")) == NULL) {
+        homedir = getpwuid(getuid())->pw_dir;
+    }
     
+    std::string hd = std::string(homedir) + "/fragment";
+    std::string db_path = std::string(homedir) + "/fragment/main.db";
+
+    const int dir_err = mkdir(hd.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    if (dir_err == -1) {
+        if (errno != EEXIST) {
+            wxMessageBox(wxT("Failed to create '" + hd + "' directory."), wxT("sqlite3_open error."), wxICON_ERROR);
+        }
+    }
+#endif
+
     wxIcon fs_icon;
     fs_icon = wxIcon(install_path + "icon.png", wxBITMAP_TYPE_PNG);
 
     SetIcon(fs_icon);
     
     UpdateDevices();
-
+#ifdef __UNIX__
+    sqlite3_open(db_path.c_str(), &db);
+#else
     sqlite3_open(install_path + "main.db", &db);
-
+#endif
 	if (db == 0) {
 		wxMessageBox(wxT("Failed to open settings database " + install_path + "'main.db'."), wxT("sqlite3_open error."), wxICON_ERROR);
     } else {
@@ -175,8 +195,8 @@ void MainFrame::submitSettingsToDB(Settings *settings, std::string &session_name
         ", " + std::to_string(settings->rx) +
         ", " + std::to_string(settings->compression) +
         ", " + std::to_string(settings->osc_out) +
-        ", " + settings->osc_out_ip +
-        ", " + std::to_string(settings->osc_out_port) +
+        ", '" + settings->osc_out_ip +
+        "', " + std::to_string(settings->osc_out_port) +
         ", " + std::to_string(settings->noise_amount) +
         ", " + std::to_string(settings->smooth_factor) +
         ", " + std::to_string(settings->granular_max_density) +
@@ -211,8 +231,8 @@ void MainFrame::updateDBSettings(Settings *settings, std::string &session_name) 
         ", rx=" + std::to_string(settings->rx) +
         ", compression=" + std::to_string(settings->compression) +
         ", osc_out=" + std::to_string(settings->osc_out) +
-        ", osc_out_ip=" + settings->osc_out_ip +
-        ", osc_out_port=" + std::to_string(settings->port) +
+        ", osc_out_ip='" + settings->osc_out_ip +
+        "', osc_out_port=" + std::to_string(settings->port) +
         ", noise=" + std::to_string(settings->noise_amount) +
         ", smooth_factor=" + std::to_string(settings->smooth_factor) +
         ", granular_max_density=" + std::to_string(settings->granular_max_density) +
@@ -340,7 +360,14 @@ void MainFrame::OnLaunchFASClicked(wxCommandEvent& event)
     if (!fas_process_state) {
         Settings *settings = getCurrentSettings();
         
-        std::string cmd_std_str = std::string("./fas") + settings->toFAS();
+        std::string cmd_std_str;
+        if (install_path == "") {
+            cmd_std_str = std::string("./fas") + settings->toFAS();
+            program_name = std::string("./fas");
+        } else {
+            cmd_std_str = std::string("/usr/local/bin/fas") + settings->toFAS();
+            program_name = std::string("/usr/local/bin/fas");
+        }
         
         delete current_settings;
         
@@ -361,7 +388,7 @@ void MainFrame::OnLaunchFASClicked(wxCommandEvent& event)
         fas_output.clear();
         
         std::thread fasThread([&]() {
-            fas_process = new TinyProcessLib::Process("./fas", "", [](const char *bytes, size_t n) {
+            fas_process = new TinyProcessLib::Process(program_name, "", [](const char *bytes, size_t n) {
                     m_fas_output.lock();
                     //std::cout << "Output from stdout: " << std::string(bytes, n);
                     fas_output.push_back(std::string(bytes, n));
