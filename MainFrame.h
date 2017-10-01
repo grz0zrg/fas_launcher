@@ -26,7 +26,8 @@ class PipeFrame : public wxFrame
 {
 public:
     PipeFrame(wxFrame *parent,
-                const wxString& cmd);
+                const wxString& cmd,
+                const wxString& install_path);
     ~PipeFrame() {
         delete timer;
     }
@@ -101,7 +102,7 @@ class Settings {
 class MainFrame : public MainFrameBaseClass
 {
 public:
-    MainFrame(wxWindow* parent);
+    MainFrame(wxWindow* parent, const wxString& path);
     virtual ~MainFrame();
     
     void SetDeviceCapability(int device);
@@ -134,6 +135,8 @@ public:
     
     Settings *default_settings;
     Settings *current_settings;
+    
+    wxString install_path = "";
     
     std::vector<const PaDeviceInfo *> devices_info;
     std::vector<double> sampling_rates = { 8000, 11025, 16000, 22050, 32000, 37800, 44056, 44100, 47250, 48000, 50000, 50400, 88200, 96000, 176400, 192000 };

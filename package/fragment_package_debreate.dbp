@@ -1,0 +1,94 @@
+[DEBREATE-0.7.13]
+<<CTRL>>
+Package: fragment
+Version: 1.0
+Maintainer: Julien Verneuil <contact@fsynth.com>
+Section: sound
+Architecture: amd64
+Priority: optional
+Depends: liblo7 (>=0.28), libwxgtk3.0-0v5 (>=3.0.2), libwxbase3.0-0v5 (>=3.0.2), libgcc1 (>=6.3.0), zlib1g (>=1.2.7), libc6 (>=2.13), libasound2 (>=1.1.0), libjack-jackd2-0 (>=1.9.10), libsndfile1 (>=1.0.25), libportaudio2 (>=19), libstdc++6 (>=5.4.0)
+Description: Fragment Synthesizer
+ Collaborative cross-platform audiovisual live coding environment with pixels based image-synth.
+ .
+ This package is bundled with the launcher and the sound server, the client can be accessed by going to https://www.fsynth.com
+
+<</CTRL>>
+<<FILES>>
+1
+/home/julien/Projets/fs/fas_launcher/Release/fas_launcher* -> fas_launcher -> /usr/local/bin
+/home/julien/Projets/fs/fas/fas* -> fas -> /usr/local/bin
+/home/julien/Projets/fs/fas_launcher/icon.png -> icon.png -> /usr/local/share/fragment
+/home/julien/Projets/fs/fas_launcher/icon_credits.png -> icon_credits.png -> /usr/local/share/fragment
+/home/julien/Projets/fs/fas_launcher/Release/main.db -> main.db -> /usr/local/share/fragment
+<</FILES>>
+<<SCRIPTS>>
+<<PREINST>>
+1
+if [ ! -d ~/.fragment ]; then mkdir ~/.fragment; fi
+if [ ! -d ~/.fragment/grains ]; then mkdir ~/.fragment/grains; fi
+<</PREINST>>
+<<POSTINST>>
+0
+<</POSTINST>>
+<<PRERM>>
+0
+<</PRERM>>
+<<POSTRM>>
+0
+<</POSTRM>>
+<</SCRIPTS>>
+<<CHANGELOG>>
+<<DEST>>DEFAULT<</DEST>>
+fragment (1.0) ; urgency=low
+
+  * initial package
+
+ -- Julien Verneuil <contact@fsynth.com>  Sun, 01 Oct 2017 15:06:00 +0200
+
+<</CHANGELOG>>
+<<COPYRIGHT>>
+The BSD 2-Clause ("Simplified" or "FreeBSD") License
+
+Copyright © 2017, Julien Verneuil [contact@fsynth.com]
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+  1. Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the following disclaimer.
+  
+  2. Redistributions in binary form must reproduce the above copyright notice,
+     this list of conditions and the following disclaimer in the documentation
+     and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<</COPYRIGHT>>
+<<MENU>>
+1
+Name=Fragment
+Version=1.0
+Exec=fas_launcher
+Comment=Collaborative cross-platform audiovisual live coding environment with pixels based image-synth
+Icon=~/.fragment/icon_credits.png
+Type=Application
+Terminal=false
+StartupNotify=true
+Encoding=UTF-8
+Categories=Audio;
+<</MENU>>
+<<BUILD>>
+1
+1
+1
+strip
+<</BUILD>>

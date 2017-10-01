@@ -80,7 +80,7 @@
 				}, {
 					"type":	"string",
 					"m_label":	"Title:",
-					"m_value":	"Fragment (launcher) - https://www.fsynth.com"
+					"m_value":	"FGL: Fragment launcher - https://www.fsynth.com"
 				}, {
 					"type":	"virtualFolderPicker",
 					"m_label":	"Virtual Folder:",

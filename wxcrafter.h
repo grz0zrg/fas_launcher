@@ -35,6 +35,9 @@
 #include <wx/button.h>
 #include <wx/menu.h>
 #include <wx/textdlg.h>
+#include <wx/filefn.h> 
+#include <wx/dir.h>
+#include <wx/stdpaths.h>
 #if wxVERSION_NUMBER >= 2900
 #include <wx/persist.h>
 #include <wx/persist/toplevel.h>
@@ -179,7 +182,7 @@ public:
     
     wxCheckBox* GetFasAppLaunchCheckBox() { return m_fasLaunchCk; }
     
-    MainFrameBaseClass(wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fragment (launcher) - https://www.fsynth.com"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(500,360), long style = wxCAPTION|wxRESIZE_BORDER|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxCLOSE_BOX);
+    MainFrameBaseClass(wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("FGL: Fragment launcher - https://www.fsynth.com"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(500,360), long style = wxCAPTION|wxRESIZE_BORDER|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxCLOSE_BOX);
     virtual ~MainFrameBaseClass();
 };
 

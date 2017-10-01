@@ -32,10 +32,12 @@ wxBEGIN_EVENT_TABLE(PipeFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 PipeFrame::PipeFrame(wxFrame *parent,
-                         const wxString& cmd)
+                         const wxString& cmd,
+                         const wxString& install_path)
            : wxFrame(parent, wxID_ANY, cmd, wxDefaultPosition, wxSize(500,400))
 {
-    wxIcon fs_icon = wxIcon("icon.png", wxBITMAP_TYPE_PNG);
+    wxIcon fs_icon = wxIcon(install_path + "icon.png", wxBITMAP_TYPE_PNG);
+
     SetIcon(fs_icon);
     
     SetMinSize(wxSize(500,400));
@@ -90,18 +92,22 @@ void PipeFrame::OnClose(wxCloseEvent& event)
     event.Skip();
 }
 
-MainFrame::MainFrame(wxWindow* parent)
+MainFrame::MainFrame(wxWindow* parent, const wxString& path)
     : MainFrameBaseClass(parent)
-{
-    wxIcon fs_icon = wxIcon("icon.png", wxBITMAP_TYPE_PNG);
+{    
+    install_path = path;
+    
+    wxIcon fs_icon;
+    fs_icon = wxIcon(install_path + "icon.png", wxBITMAP_TYPE_PNG);
+
     SetIcon(fs_icon);
     
     UpdateDevices();
-    
-    sqlite3_open("main.db", &db);
-    
+
+    sqlite3_open(install_path + "main.db", &db);
+
 	if (db == 0) {
-		wxMessageBox(wxT("Failed to open settings database 'main.db'."), wxT("sqlite3_open error."), wxICON_ERROR);
+		wxMessageBox(wxT("Failed to open settings database " + install_path + "'main.db'."), wxT("sqlite3_open error."), wxICON_ERROR);
     } else {
         const char *sql = "CREATE TABLE IF NOT EXISTS sessions("  \
             "id INTEGER PRIMARY KEY AUTOINCREMENT," \
@@ -350,7 +356,7 @@ void MainFrame::OnLaunchFASClicked(wxCommandEvent& event)
             wxLaunchDefaultBrowser("https://www.fsynth.com/app/" + session_listbox->GetString(selected_session) + "?fas=1", wxBROWSER_NEW_WINDOW);
         }
 
-        PipeFrame *fas_frame = new PipeFrame(this, cmd_std_str);
+        PipeFrame *fas_frame = new PipeFrame(this, cmd_std_str, install_path);
         
         fas_output.clear();
         
@@ -572,13 +578,14 @@ void MainFrame::OnDelSessionClicked(wxCommandEvent& event)
 
 void MainFrame::OnAbout(wxCommandEvent& event)
 {
-    wxIcon fs_icon = wxIcon("icon_credits.png", wxBITMAP_TYPE_PNG);
+    wxIcon fs_icon = wxIcon(install_path + "icon_credits.png", wxBITMAP_TYPE_PNG);
+
     SetIcon(fs_icon);
     
     wxUnusedVar(event);
     wxAboutDialogInfo info;
     info.SetIcon(fs_icon);
-    info.SetName("Fragment (launcher)");
+    info.SetName("FGL: Fragment Graphical Launcher");
     info.SetWebSite("https://www.fsynth.com");
     info.AddDeveloper("Julien Verneuil - contact@fsynth.com - https://github.com/grz0zrg");
     info.SetCopyright(_("Fragment © 2016 - 2017"));

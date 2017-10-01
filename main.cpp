@@ -14,12 +14,23 @@ public:
         // initialize portaudio
         PaError err = Pa_Initialize();
         if (err != paNoError) return false;
+
         
         // Add the common image handlers
         wxImage::AddHandler( new wxPNGHandler );
         wxImage::AddHandler( new wxJPEGHandler );
 
-        MainFrame *mainFrame = new MainFrame(NULL);
+        MainFrame *mainFrame;
+        #ifdef __unix__
+            if (wxDir::Exists("/usr/local/share/fragment")) {
+                mainFrame = new MainFrame(NULL, "/usr/local/share/fragment/");
+            } else {
+                mainFrame = new MainFrame(NULL, "");
+            }
+        #else
+            mainFrame = new MainFrame(NULL, "");
+        #endif
+        
         SetTopWindow(mainFrame);
         
         return GetTopWindow()->Show();
