@@ -4,8 +4,16 @@
 #include <string>
 #include <functional>
 #include <vector>
+
+#ifdef _WINCROSS_w64
+#include "../mingw.mutex.h"
+#include "../mingw.thread.h"
+#undef UNICODE
+#else
 #include <mutex>
 #include <thread>
+#endif
+
 #include <memory>
 #ifndef _WIN32
 #include <sys/wait.h>
