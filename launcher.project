@@ -146,7 +146,7 @@
         <Preprocessor Value="_WIN32"/>
         <Preprocessor Value="_WINCROSS_w64"/>
       </Compiler>
-      <Linker Options="-mwindows;-L/home/julien/crosscompile/wxWidgets/lib;-lwx_mswu_xrc-3.1-x86_64-w64-mingw32;-lwx_mswu_html-3.1-x86_64-w64-mingw32;-lwx_mswu_qa-3.1-x86_64-w64-mingw32;-lwx_mswu_adv-3.1-x86_64-w64-mingw32;-lwx_mswu_core-3.1-x86_64-w64-mingw32;-lwx_baseu_xml-3.1-x86_64-w64-mingw32;-lwx_baseu_net-3.1-x86_64-w64-mingw32;-lwx_baseu-3.1-x86_64-w64-mingw32;-lwinmm;-lm;-L/usr/local/dx7sdk/lib;-ldsound;-lole32;-lwinmm;-luuid;-lwinmm" Required="yes">
+      <Linker Options="-mwindows;-L/home/julien/crosscompile/wxWidgets/lib;-lwx_mswu_xrc-3.1-x86_64-w64-mingw32;-lwx_mswu_html-3.1-x86_64-w64-mingw32;-lwx_mswu_qa-3.1-x86_64-w64-mingw32;-lwx_mswu_adv-3.1-x86_64-w64-mingw32;-lwx_mswu_core-3.1-x86_64-w64-mingw32;-lwx_baseu_xml-3.1-x86_64-w64-mingw32;-lwx_baseu_net-3.1-x86_64-w64-mingw32;-lwx_baseu-3.1-x86_64-w64-mingw32;-lwinmm;-lm;-L/usr/local/dx7sdk/lib;-ldsound;-lole32" Required="yes">
         <LibraryPath Value="lib"/>
         <LibraryPath Value="lib/cross"/>
         <Library Value="winmm"/>

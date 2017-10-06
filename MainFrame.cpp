@@ -95,7 +95,7 @@ void PipeFrame::OnClose(wxCloseEvent& event)
 
 MainFrame::MainFrame(wxWindow* parent, const wxString& path)
     : MainFrameBaseClass(parent)
-{    
+{        
     install_path = path;
 
 #ifdef __UNIX__
@@ -648,13 +648,21 @@ void MainFrame::OnAbout(wxCommandEvent& event)
 void MainFrame::SetDeviceCapability(int device) {
     PaError err;
     
-    PaStreamParameters outputParameters;
-    memset(&outputParameters, 0, sizeof(PaStreamParameters));
-    
     const PaDeviceInfo *device_info;
     device_info = Pa_GetDeviceInfo(device);
-    
+    if (device_info == NULL) {
+        return;
+    }
+
     int device_max_output_channels = device_info->maxOutputChannels;
+
+    if (device_max_output_channels < 2) {
+        wxMessageBox(wxT("Can't use this audio device because it has less than 2 output channels."), wxT("Can't use the audio device."), wxICON_ERROR);
+        return;
+    }
+    
+    PaStreamParameters outputParameters;
+    memset(&outputParameters, 0, sizeof(PaStreamParameters));
     
     outputParameters.device = device;
     outputParameters.channelCount = device_max_output_channels;
@@ -704,8 +712,8 @@ void MainFrame::UpdateDevices() {
     for (i = 0; i < devices_info.size(); i += 1) {
         device_info = devices_info[i];
         
-        if (strcmp(device_info->name, "default")) {
-            def = i + 1;
+        if (strcmp(device_info->name, "default") == 0 || strcmp(device_info->name, "Primary Sound Driver") == 0) {
+            def = i;
         }
         
         devices->Append(device_info->name);
@@ -736,7 +744,9 @@ void MainFrame::ScanDevices() {
     for (i = 0; i < num_devices; i += 1) {
         device_info = Pa_GetDeviceInfo(i);
         
-        devices_info.push_back(device_info);
+        if (device_info != NULL) {
+            devices_info.push_back(device_info);
+        }
 /*
         printf("\nPortAudio device %i - %s\n==========\n", i, device_info->name);
         printf("  max input channels : %i\n", device_info->maxInputChannels);
