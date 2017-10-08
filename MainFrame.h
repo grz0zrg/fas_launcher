@@ -76,10 +76,10 @@ class Settings {
         int commands_queue = 16;
         double smooth_factor = 8;
         
-        const std::string toFAS() {
-            std::string parameters;
+        const std::string toFAS(const std::string &cmd) {
+            std::string parameters = cmd;
             
-            parameters = " --device " + std::to_string(device_id);
+            parameters += " --device " + std::to_string(device_id);
             parameters += " --sample_rate " + std::to_string(sample_rate);
             parameters += " --frames " + std::to_string(buffer_size);
             parameters += " --output_channels " + std::to_string(channels);

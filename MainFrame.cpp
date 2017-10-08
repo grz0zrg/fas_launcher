@@ -3,6 +3,7 @@
 
 TinyProcessLib::Process *fas_process;
 std::string program_name;
+std::string cmd_std_str;
 
 std::atomic<bool> fas_state;
 std::mutex m_fas_output;
@@ -360,15 +361,14 @@ void MainFrame::OnLaunchFASClicked(wxCommandEvent& event)
     if (!fas_process_state) {
         Settings *settings = getCurrentSettings();
         
-        std::string cmd_std_str;
         if (install_path == "") {
-            cmd_std_str = std::string("./fas") + settings->toFAS();
+            cmd_std_str = settings->toFAS("./fas");
             program_name = std::string("./fas");
         } else {
-            cmd_std_str = std::string("/usr/local/bin/fas") + settings->toFAS();
+            cmd_std_str = settings->toFAS("/usr/local/bin/fas");
             program_name = std::string("/usr/local/bin/fas");
         }
-        
+
         delete current_settings;
         
         current_settings = settings;
@@ -386,9 +386,9 @@ void MainFrame::OnLaunchFASClicked(wxCommandEvent& event)
         PipeFrame *fas_frame = new PipeFrame(this, cmd_std_str, install_path);
         
         fas_output.clear();
-        
+
         std::thread fasThread([&]() {
-            fas_process = new TinyProcessLib::Process(program_name, "", [](const char *bytes, size_t n) {
+            fas_process = new TinyProcessLib::Process(cmd_std_str, "", [](const char *bytes, size_t n) {
                     m_fas_output.lock();
                     //std::cout << "Output from stdout: " << std::string(bytes, n);
                     fas_output.push_back(std::string(bytes, n));
