@@ -77,7 +77,7 @@ protected:
     wxStaticText* m_staticText74;
     wxSpinCtrl* m_spinCtrl86;
     wxStaticText* m_staticText98;
-    wxSpinButton* m_spinButton100;
+    wxSpinCtrl* m_spinButton100;
     wxStaticLine* m_staticLine92;
     wxCheckBox* m_checkBox90;
     wxCollapsiblePane* m_collPane188;
@@ -100,11 +100,11 @@ protected:
     wxCheckBox* m_fasLaunchCk;
     wxCollapsiblePane* m_collPane192;
     wxStaticText* m_staticText1105;
-    wxSpinButton* m_spinButton1126;
+    wxSpinCtrl* m_spinButton1126;
     wxStaticText* m_staticText1147;
-    wxSpinButton* m_spinButton1168;
+    wxSpinCtrl* m_spinButton1168;
     wxStaticText* m_staticText1189;
-    wxSpinButton* m_spinButton12010;
+    wxSpinCtrl* m_spinButton12010;
     wxButton* m_button136;
     wxButton* m_button139;
     wxButton* m_button229;
@@ -150,7 +150,7 @@ public:
     wxSpinCtrl* GetSpinCtrl86() { return m_spinCtrl86; }
     wxSpinCtrl* GetSpinCtrlGrDensity() { return m_spinCtrlGrDensity; }
     wxStaticText* GetStaticText98() { return m_staticText98; }
-    wxSpinButton* GetSpinButton100() { return m_spinButton100; }
+    wxSpinCtrl* GetSpinButton100() { return m_spinButton100; }
     wxStaticLine* GetStaticLine92() { return m_staticLine92; }
     wxCheckBox* GetCheckBox90() { return m_checkBox90; }
     wxCollapsiblePane* GetCollPane176() { return m_collPane176; }
@@ -161,11 +161,11 @@ public:
     wxTextCtrl* GetTextCtrl224() { return m_textCtrl224; }
     wxCollapsiblePane* GetCollPane188() { return m_collPane188; }
     wxStaticText* GetStaticText1105() { return m_staticText1105; }
-    wxSpinButton* GetSpinButton1126() { return m_spinButton1126; }
+    wxSpinCtrl* GetSpinButton1126() { return m_spinButton1126; }
     wxStaticText* GetStaticText1147() { return m_staticText1147; }
-    wxSpinButton* GetSpinButton1168() { return m_spinButton1168; }
+    wxSpinCtrl* GetSpinButton1168() { return m_spinButton1168; }
     wxStaticText* GetStaticText1189() { return m_staticText1189; }
-    wxSpinButton* GetSpinButton12010() { return m_spinButton12010; }
+    wxSpinCtrl* GetSpinButton12010() { return m_spinButton12010; }
     wxCollapsiblePane* GetCollPane192() { return m_collPane192; }
     wxButton* GetButton136() { return m_button136; }
     wxButton* GetButton229() { return m_button229; }

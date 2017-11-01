@@ -421,13 +421,13 @@ void MainFrame::updateUISettings(Settings *settings) {
     wxCheckBox* alsa_rt_ck = GetCheckBox96();
     wxTextCtrl* ip_txt_ctrl = GetTextCtrl72();
     wxSpinCtrl* port_spin = GetSpinCtrl86();
-    wxSpinButton* rx_spin = GetSpinButton100();
+    wxSpinCtrl* rx_spin = GetSpinButton100();
     wxCheckBox* compression_ck = GetCheckBox90();
     wxSpinCtrlDouble* noise_amount_spin = GetSpinButton108();
     wxTextCtrl* grains_folder_txt_ctrl = GetTextCtrl224();
-    wxSpinButton* fps_spin = GetSpinButton1126();
-    wxSpinButton* fqueue_spin = GetSpinButton1168();
-    wxSpinButton* cqueue_spin = GetSpinButton12010();
+    wxSpinCtrl* fps_spin = GetSpinButton1126();
+    wxSpinCtrl* fqueue_spin = GetSpinButton1168();
+    wxSpinCtrl* cqueue_spin = GetSpinButton12010();
     
     wxSpinCtrlDouble* smooth_factor_spin = GetSpinButtonSInter();
     wxSpinCtrl* granular_max_density_spin = GetSpinCtrlGrDensity();
@@ -485,13 +485,13 @@ Settings *MainFrame::getCurrentSettings() {
     wxCheckBox* alsa_rt_ck = GetCheckBox96();
     wxTextCtrl* ip_txt_ctrl = GetTextCtrl72();
     wxSpinCtrl* port_spin = GetSpinCtrl86();
-    wxSpinButton* rx_spin = GetSpinButton100();
+    wxSpinCtrl* rx_spin = GetSpinButton100();
     wxCheckBox* compression_ck = GetCheckBox90();
     wxSpinCtrlDouble* noise_amount_spin = GetSpinButton108();
     wxTextCtrl* grains_folder_txt_ctrl = GetTextCtrl224();
-    wxSpinButton* fps_spin = GetSpinButton1126();
-    wxSpinButton* fqueue_spin = GetSpinButton1168();
-    wxSpinButton* cqueue_spin = GetSpinButton12010();
+    wxSpinCtrl* fps_spin = GetSpinButton1126();
+    wxSpinCtrl* fqueue_spin = GetSpinButton1168();
+    wxSpinCtrl* cqueue_spin = GetSpinButton12010();
     
     wxSpinCtrlDouble* smooth_factor_spin = GetSpinButtonSInter();
     wxSpinCtrl* granular_max_density_spin = GetSpinCtrlGrDensity();
@@ -615,7 +615,7 @@ void MainFrame::OnAbout(wxCommandEvent& event)
     info.SetName("FGL: Fragment Graphical Launcher");
     info.SetWebSite("https://www.fsynth.com");
     info.AddDeveloper("Julien Verneuil - contact@fsynth.com - https://github.com/grz0zrg");
-    info.SetCopyright(_("Fragment © 2016 - 2017"));
+    info.SetCopyright(_("Fragment (c) 2016 - 2017"));
     info.SetLicence(_("BSD 2-Clause License\n\
         \n\
         Copyright (c) 2017, Julien Verneuil\n\

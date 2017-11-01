@@ -1,7 +1,7 @@
 [DEBREATE-0.7.13]
 <<CTRL>>
 Package: fragment
-Version: 1.0
+Version: 1.0.1
 Maintainer: Julien Verneuil <contact@fsynth.com>
 Section: sound
 Architecture: amd64
@@ -15,11 +15,11 @@ Description: Fragment Synthesizer
 <</CTRL>>
 <<FILES>>
 1
-/home/julien/Projets/fs/fas/grains/README -> README -> /usr/local/share/fragment/grains
-/home/julien/Projets/fs/fas_launcher/icon_credits.png -> icon_credits.png -> /usr/local/share/fragment
-/home/julien/Projets/fs/fas_launcher/icon.png -> icon.png -> /usr/local/share/fragment
-/home/julien/Projets/fs/fas/fas* -> fas -> /usr/local/bin
 /home/julien/Projets/fs/fas_launcher/Release/fas_launcher* -> fas_launcher -> /usr/local/bin
+/home/julien/Projets/fs/fas/fas* -> fas -> /usr/local/bin
+/home/julien/Projets/fs/fas_launcher/icon.png -> icon.png -> /usr/local/share/fragment
+/home/julien/Projets/fs/fas_launcher/icon_credits.png -> icon_credits.png -> /usr/local/share/fragment
+/home/julien/Projets/fs/fas/grains/README -> README -> /usr/local/share/fragment/grains
 <</FILES>>
 <<SCRIPTS>>
 <<PREINST>>
@@ -38,6 +38,14 @@ rm /usr/local/share/fragment/grains/README
 <</SCRIPTS>>
 <<CHANGELOG>>
 <<DEST>>DEFAULT<</DEST>>
+fragment (1.0.1) ; urgency=low
+
+  * sound server update
+  * launcher update
+
+ -- Julien Verneuil <contact@fsynth.com>  Wed, 01 Nov 2017 01:23:00 +0100
+
+
 fragment (1.0) ; urgency=low
 
   * initial package

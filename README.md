@@ -8,7 +8,7 @@ The [Fragment Audio Server](https://github.com/grz0zrg/fas) executable should be
 
 ## Description
 
-This program is a simple native launcher which provide an easy interface to start the Fragment Audio Server, the launcher also provide a convenient way to configure the audio server for individual sessions and provide a direct way to launch the web. application pre-linked to the native audio server.
+This program is a simple native launcher which provide an easy to use interface to start the Fragment Audio Server, the launcher also provide a convenient way to configure the audio server for individual sessions and provide a direct way to launch the web. application pre-linked with the native audio server by passing **?fas=1** as a web. argument.
 
 ## Package
 

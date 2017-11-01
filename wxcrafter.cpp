@@ -163,7 +163,7 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     
     flexGridSizer84->Add(m_staticText98, 0, wxALL, WXC_FROM_DIP(5));
     
-    m_spinButton100 = new wxSpinButton(m_collPane176->GetPane(), wxID_ANY, wxDefaultPosition, wxDLG_UNIT(m_collPane176->GetPane(), wxSize(-1,-1)), wxSP_VERTICAL);
+    m_spinButton100 = new wxSpinCtrl(m_collPane176->GetPane(), wxID_ANY, wxT("0"), wxDefaultPosition, wxDLG_UNIT(m_collPane176->GetPane(), wxSize(-1,-1)), wxSP_ARROW_KEYS);
     m_spinButton100->SetRange(0, 16777216);
     m_spinButton100->SetValue(4096);
     
@@ -313,7 +313,7 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     
     flexGridSizer1042->Add(m_staticText1105, 0, wxALL|wxALIGN_RIGHT, WXC_FROM_DIP(5));
     
-    m_spinButton1126 = new wxSpinButton(m_collPane192->GetPane(), wxID_ANY, wxDefaultPosition, wxDLG_UNIT(m_collPane192->GetPane(), wxSize(-1,-1)), wxSP_VERTICAL);
+    m_spinButton1126 = new wxSpinCtrl(m_collPane192->GetPane(), wxID_ANY, wxT("0"), wxDefaultPosition, wxDLG_UNIT(m_collPane192->GetPane(), wxSize(-1,-1)), wxSP_ARROW_KEYS);
     m_spinButton1126->SetRange(1, 16777216);
     m_spinButton1126->SetValue(60);
     
@@ -323,7 +323,7 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     
     flexGridSizer1042->Add(m_staticText1147, 0, wxALL|wxALIGN_RIGHT, WXC_FROM_DIP(5));
     
-    m_spinButton1168 = new wxSpinButton(m_collPane192->GetPane(), wxID_ANY, wxDefaultPosition, wxDLG_UNIT(m_collPane192->GetPane(), wxSize(-1,-1)), wxSP_VERTICAL);
+    m_spinButton1168 = new wxSpinCtrl(m_collPane192->GetPane(), wxID_ANY, wxT("0"), wxDefaultPosition, wxDLG_UNIT(m_collPane192->GetPane(), wxSize(-1,-1)), wxSP_ARROW_KEYS);
     m_spinButton1168->SetRange(1, 16777216);
     m_spinButton1168->SetValue(7);
     
@@ -333,7 +333,7 @@ MainFrameBaseClass::MainFrameBaseClass(wxWindow* parent, wxWindowID id, const wx
     
     flexGridSizer1042->Add(m_staticText1189, 0, wxALL|wxALIGN_RIGHT, WXC_FROM_DIP(5));
     
-    m_spinButton12010 = new wxSpinButton(m_collPane192->GetPane(), wxID_ANY, wxDefaultPosition, wxDLG_UNIT(m_collPane192->GetPane(), wxSize(-1,-1)), wxSP_VERTICAL);
+    m_spinButton12010 = new wxSpinCtrl(m_collPane192->GetPane(), wxID_ANY, wxT("0"), wxDefaultPosition, wxDLG_UNIT(m_collPane192->GetPane(), wxSize(-1,-1)), wxSP_ARROW_KEYS);
     m_spinButton12010->SetRange(1, 16777216);
     m_spinButton12010->SetValue(16);
     

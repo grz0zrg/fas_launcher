@@ -137,7 +137,7 @@
       </Completion>
     </Configuration>
     <Configuration Name="Release_WinCross" CompilerType="Cross GCC (x86_64-w64-mingw32" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-O2;-std=c++11;-I/home/julien/crosscompile/wxWidgets/lib/wx/include/x86_64-w64-mingw32-msw-unicode-3.1;-I/home/julien/crosscompile/wxWidgets/include;-D_FILE_OFFSET_BITS=64;-DWXUSINGDLL -D__WXMSW__;-pthread" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-O2;-std=c++11;-I/home/julien/crosscompile/wxWidgets/lib/wx/include/x86_64-w64-mingw32-msw-unicode-3.1;-I/home/julien/crosscompile/wxWidgets/include;-D_FILE_OFFSET_BITS=64;-DWXUSINGDLL;-D__WXMSW__ -DUNICODE;-pthread" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <IncludePath Value="include"/>
         <IncludePath Value="include/tinyprocess"/>
@@ -146,7 +146,7 @@
         <Preprocessor Value="_WIN32"/>
         <Preprocessor Value="_WINCROSS_w64"/>
       </Compiler>
-      <Linker Options="-mwindows;-L/home/julien/crosscompile/wxWidgets/lib;-lwx_mswu_xrc-3.1-x86_64-w64-mingw32;-lwx_mswu_html-3.1-x86_64-w64-mingw32;-lwx_mswu_qa-3.1-x86_64-w64-mingw32;-lwx_mswu_adv-3.1-x86_64-w64-mingw32;-lwx_mswu_core-3.1-x86_64-w64-mingw32;-lwx_baseu_xml-3.1-x86_64-w64-mingw32;-lwx_baseu_net-3.1-x86_64-w64-mingw32;-lwx_baseu-3.1-x86_64-w64-mingw32;-lwinmm;-lm;-L/usr/local/dx7sdk/lib;-ldsound;-lole32" Required="yes">
+      <Linker Options="-mwindows;-L/home/julien/crosscompile/wxWidgets/lib;-lwx_mswu_xrc-3.1-x86_64-w64-mingw32;-lwx_mswu_html-3.1-x86_64-w64-mingw32;-lwx_mswu_qa-3.1-x86_64-w64-mingw32;-lwx_mswu_adv-3.1-x86_64-w64-mingw32;-lwx_mswu_core-3.1-x86_64-w64-mingw32;-lwx_baseu_xml-3.1-x86_64-w64-mingw32;-lwx_baseu_net-3.1-x86_64-w64-mingw32;-lwx_baseu-3.1-x86_64-w64-mingw32;-lwinmm;-lm;-L/usr/local/dx7sdk/lib;-ldsound;-lole32;win_resources.rc.o" Required="yes">
         <LibraryPath Value="lib"/>
         <LibraryPath Value="lib/cross"/>
         <Library Value="winmm"/>
@@ -154,7 +154,7 @@
         <Library Value="tiny-process-library-win"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/fas_$(ProjectName).exe" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="no" IsGUIProgram="no" IsEnabled="yes"/>
+      <General OutputFile="$(IntermediateDirectory)/fas_$(ProjectName).exe" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="no" IsGUIProgram="yes" IsEnabled="yes"/>
       <BuildSystem Name="Default"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
@@ -178,7 +178,10 @@
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>
-        <CustomPreBuild/>
+        <CustomPreBuild>win_resources.rc.o
+win_resources.rc.o:
+	/usr/bin/x86_64-w64-mingw32-windres -i win_resources.rc --define __WXMSW__ --define _UNICODE --include-dir /home/julien/crosscompile/wxWidgets/lib/wx/include/x86_64-w64-mingw32-msw-unicode-3.1 --include-dir /home/julien/crosscompile/wxWidgets/include --define WXUSINGDLL -o win_resources.rc.o
+</CustomPreBuild>
       </AdditionalRules>
       <Completion EnableCpp11="no" EnableCpp14="no">
         <ClangCmpFlagsC/>
