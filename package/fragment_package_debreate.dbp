@@ -1,7 +1,7 @@
 [DEBREATE-0.7.13]
 <<CTRL>>
 Package: fragment
-Version: 1.0.1
+Version: 1.0.3
 Maintainer: Julien Verneuil <contact@fsynth.com>
 Section: sound
 Architecture: amd64
@@ -38,6 +38,26 @@ rm /usr/local/share/fragment/grains/README
 <</SCRIPTS>>
 <<CHANGELOG>>
 <<DEST>>DEFAULT<</DEST>>
+fragment (1.0.3) ; urgency=low
+
+  * add FAS subtractive synthesis
+  * add FAS PM synthesis
+  * improve FAS granular synthesis
+  * fix issue with stereo samples loading
+  * fix FAS leaks
+
+ -- Julien Verneuil <contact@fsynth.com>  Sun, 31 Dec 2017 14:46:43 +0100
+
+
+fragment (1.0.2) ; urgency=low
+
+  * improved FAS granular synthesis
+  * improved FAS sound synthesis
+  * fix FAS bugs
+
+ -- Julien Verneuil <contact@fsynth.com>  Sun, 19 Nov 2017 17:40:38 +0100
+
+
 fragment (1.0.1) ; urgency=low
 
   * sound server update
